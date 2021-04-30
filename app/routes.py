@@ -28,3 +28,14 @@ def handle_planets():
         db.session.commit()
 
         return make_response(f"Planet {new_planet.name} was successfully added", 201)
+    
+@planets_bp.route("/<planet_id>", methods=["GET"])
+def handle_planet(planet_id):
+    planet - Planet.query.get(planet_id)
+
+    return{
+        "id" : planet.id,
+        "name" : planet.name,
+        "description" : planet.description,
+        "distance_from_earth" : planet.distance_from_earth
+    }
