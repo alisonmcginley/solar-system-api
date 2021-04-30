@@ -1,10 +1,10 @@
-from flask import Blueprint
 from app.models.planet import Planet
 from flask import request, Blueprint, make_response, jsonify
+from app import db
 
 planets_bp = Blueprint("planets", __name__, url_prefix="/planets")
 
-@planets_bp.route(methods=["GET"], ["POST"])
+@planets_bp.route("", methods=["GET","POST"])
 def handle_planets():
     if request.method == "GET":
         planets = Planet.query.all()
@@ -18,10 +18,10 @@ def handle_planets():
             })
         return jsonify(planets_response)
     
-    elif request_method == "POST":
+    elif request.method == "POST":
         request_body = request.get_json()
         new_planet = Planet(name=request_body["name"],
-                            description=request_body["description"]
+                            description=request_body["description"],
                             distance_from_earth=request_body["distance from earth"]
                             )
         db.session.add(new_planet)
@@ -31,7 +31,7 @@ def handle_planets():
     
 @planets_bp.route("/<planet_id>", methods=["GET"])
 def handle_planet(planet_id):
-    planet - Planet.query.get(planet_id)
+    planet = Planet.query.get(planet_id)
 
     return{
         "id" : planet.id,
